@@ -1,6 +1,5 @@
-# Ruby module to use Pashua (http://www.bluem.net/downloads/pashua_en/).
-# This module was contributed to the Pashua distribution by Mike Hall,
-# with some changes by Carsten Bluem.
+# Ruby module to use Pashua (www.bluem.net/jump/pashua).
+# For more info, see https://github.com/BlueM/Pashua-Binding-Ruby
 
 require 'tempfile'
 
@@ -19,14 +18,9 @@ module Pashua
     return res
   end
 
-  private 
-  CWD='.'
-  ROOT = '/'
-  APPS = '/Applications'
-  USER = File::expand_path('~' + APPS)
   def pashua_locate(path = '')
-  	locations = [File.dirname($0), $0, CWD, ROOT, APPS, USER]
-  	locations = [path] + locations if path != ''
+    locations = [File.dirname($0), $0, '.', '/', '/Applications', File.expand_path('~/Applications')]
+    locations = [path] + locations if path != ''
     for d in locations
       p = File::join(d, 'Pashua')
       return p if File::executable?(p)
@@ -38,4 +32,3 @@ module Pashua
   end
 
 end
-
