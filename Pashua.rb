@@ -20,10 +20,6 @@ module Pashua
     return res
   end
 
-  def pashua_rewrite(s)
-    return (s.nil?) ? s : s.gsub(/\[return\]/, "\n") 	# rewrite any 'returns'
-  end
-
   private 
   CWD='.'
   ROOT = '/'
