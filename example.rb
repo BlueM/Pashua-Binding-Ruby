@@ -19,32 +19,31 @@ $:.push(File.dirname($0))
 require 'Pashua'
 include Pashua
 
-Config = <<EOS
-# Set transparency: 0 is transparent, 1 is opaque
-*.transparency=0.95
-
+config = <<EOS
 # Set window title
-*.title = Introducing Pashua
+*.title = Welcome to Pashua
 
 # Introductory text
 txt.type = text
-txt.default = Pashua is an application for generating dialog windows from programming languages which lack support for creating native GUIs on Mac OS X. Any information you enter in this example window will be returned to the calling script when you hit “OK”; if you decide to click “Cancel” or press “Esc” instead, no values will be returned.[return][return]This window demonstrates nine of the GUI widgets that are currently available. You can find a full list of all GUI elements and their corresponding attributes in the documentation that is included with Pashua.
+txt.default = Pashua is an application for generating dialog windows from programming languages which lack support for creating native GUIs on Mac OS X. Any information you enter in this example window will be returned to the calling script when you hit “OK”; if you decide to click “Cancel” or press “Esc” instead, no values will be returned.[return][return]This window shows nine of the UI element types that are available. You can find a full list of all GUI elements and their corresponding attributes in the documentation (➔ Help menu) that is included with Pashua.
 txt.height = 276
 txt.width = 310
 txt.x = 340
 txt.y = 44
+txt.tooltip = This is an element of type “text”
 
 # Add a text field
 tf.type = textfield
 tf.label = Example textfield
 tf.default = Textfield content
 tf.width = 310
+tf.tooltip = This is an element of type “textfield”
 
 # Add a filesystem browser
 ob.type = openbrowser
 ob.label = Example filesystem browser (textfield + open panel)
 ob.width=310
-ob.tooltip = Blabla filesystem browser
+ob.tooltip = This is an element of type “openbrowser”
 
 # Define radiobuttons
 rb.type = radiobutton
@@ -52,8 +51,7 @@ rb.label = Example radiobuttons
 rb.option = Radiobutton item #1
 rb.option = Radiobutton item #2
 rb.option = Radiobutton item #3
-rb.option = Radiobutton item #4
-rb.default = Radiobutton item #2
+rb.tooltip = This is an element of type “radiobutton”
 
 # Add a popup menu
 pop.type = popup
@@ -63,56 +61,57 @@ pop.option = Popup menu item #1
 pop.option = Popup menu item #2
 pop.option = Popup menu item #3
 pop.default = Popup menu item #2
+pop.tooltip = This is an element of type “popup”
 
-# Add a checkbox
-chk1.type = checkbox
-chk1.label = Pashua offers checkboxes, too
-chk1.rely = -18
-chk1.default = 1
-
-# Add another one
+# Add 2 checkboxes
+chk.rely = -18
+chk.type = checkbox
+chk.label = Pashua offers checkboxes, too
+chk.tooltip = This is an element of type “checkbox”
+chk.default = 1
 chk2.type = checkbox
 chk2.label = But this one is disabled
 chk2.disabled = 1
+chk2.tooltip = Another element of type “checkbox”
 
 # Add a cancel button with default label
 cb.type = cancelbutton
+cb.tooltip = This is an element of type “cancelbutton”
+
+db.type = defaultbutton
+db.tooltip = This is an element of type “defaultbutton” (which is automatically added to each window, if not included in the configuration)
 
 EOS
 
-# Set the images' paths relative to this file's path / 
-# skip images if they can not be found in this file's path
-icon  = File.dirname($0) << "/.icon.png";
-bgimg = File.dirname($0) << "/.demo.png";
-
-if File::exists?(icon)
-	# Display Pashua's icon
-	Config << "img.type = image
-	img.x = 530
-	img.y = 255
-	img.path = #{icon}
-	"
+if File.directory?('/Volumes/Pashua/Pashua.app')
+  # Looks like the Pashua disk image is mounted. Run from there.
+  custom_location = '/Volumes/Pashua'
+else
+  # Search for Pashua in the standard locations
+  custom_location = ''
 end
 
-if File::exists?(bgimg)
-	# Display Pashua's icon
-	Config << "bg.type = image
-	bg.x = 30
-	bg.y = 2
-	bg.path = #{bgimg}
-	"
+# Get the icon from the application bundle
+icon_path = File.dirname(File.dirname(pashua_locate(custom_location))) + '/Resources/AppIcon@2.png'
+if File.exists?(icon_path)
+  config << "img.type = image
+  img.x = 435
+  img.y = 248
+  img.maxwidth = 128
+  img.tooltip = This is an element of type “image”
+  img.path = #{icon_path}"
 end
 
-res = pashua_run(Config, 'utf8')
+res = pashua_run(config)
 
 if res['cb'] == "1"
   puts "Looks like the dialog was cancelled"
 else
   puts "Pashua returned the following values:"
   puts " cb  = #{res['cb']}"
-  puts " pop  = #{res['pop']}"
-  puts " rb   = #{res['rb']}"
-  puts " ob   = #{res['ob']}"
-  puts " tf   = #{res['tf']}"
-  puts " chk  = #{res['chk']}"
+  puts " pop = #{res['pop']}"
+  puts " rb  = #{res['rb']}"
+  puts " ob  = #{res['ob']}"
+  puts " tf  = #{res['tf']}"
+  puts " chk = #{res['chk']}"
  end
