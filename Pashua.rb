@@ -6,14 +6,13 @@ require 'tempfile'
 
 module Pashua
 
-  def pashua_run(script, encoding = '', path = '')
+  def pashua_run(script, path = '')
     pbin = pashua_locate(path) or return nil
-   	encoding = "-e " + encoding + " " if encoding != ''
     res = Hash.new
     tmp = Tempfile.open('Pashua')
     tmp.puts script
     tmp.close
-    IO.popen("'" + pbin + "' " + encoding + tmp.path).each do |s|
+    IO.popen("'" + pbin + "' " + tmp.path).each do |s|
       key, val = s.chomp.split('=', 2)
       res[key] = val
     end
