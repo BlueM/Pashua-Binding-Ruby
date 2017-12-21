@@ -9,7 +9,7 @@ This code can be found in a GitHub repository at https://github.com/BlueM/Pashua
 Usage
 ======
 This repository contains two source code files:
-* `example.php` is an example, which does not do much more than define how the dialog window should look like and use the module in the second file.
+* `example.rb` is an example, which does not do much more than define how the dialog window should look like and use the module in the second file.
 * `Pashua.rb` contains a Ruby module which handles locating and communicating with Pashua. The way the module works is neither the best nor the only way to “talk” to Pashua from within Ruby, but rather one out of several possibe. implementations.
 
 Of course, you will need Pashua on your Mac to run the example. The code expects Pashua.app in one of the “typical” locations, such as the global or the user’s “Applications” folder, or in the folder which contains “example.php”, but will prefer a Pashua version in `/Volumes/Pashua` (which is the mounted path of the Pashua distribution disk image).
